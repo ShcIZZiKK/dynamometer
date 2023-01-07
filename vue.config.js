@@ -3,6 +3,8 @@ process.env.NODE_ENV === "production" ? "/dynamometer/" : "/",
   (module.exports = defineConfig({
     transpileDependencies: true,
 
+    publicPath: process.env.NODE_ENV === "production" ? "/dynamometer/" : "/",
+
     pluginOptions: {
       svgSprite: {
         dir: "src/assets/svg",
