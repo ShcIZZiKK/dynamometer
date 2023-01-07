@@ -1,0 +1,120 @@
+@import "@/assets/styles/colors.scss";
+
+@mixin glare() {
+    position: absolute;
+    content: "";
+    width: 14px;
+    height: 138px;
+    top: 4px;
+    left: 4px;
+    background: rgba($white, 0.4);
+    border-radius: 1px;
+    z-index: 2;
+}
+
+.dynamo-meter-ui {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+}
+
+.dynamo-meter-ui__scale {
+    position: absolute;
+    left: 23px;
+    width: 40px;
+    height: 147px;
+    margin-right: 27px;
+}
+
+.dynamo-meter-ui__scale-bg {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: $lite-blue5;
+    border: 1px solid $dark-blue3;
+    box-shadow: 0 4px 4px rgba($black, 0.25);
+    border-radius: 4px;
+
+    &:before {
+        @include glare();
+    }
+
+    span {
+        $top: 7;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: block;
+        height: 1px;
+        width: 20px;
+        background: $lite-blue6;
+        z-index: 1;
+
+        @for $i from 1 through 12 {
+            &:nth-child(#{$i}) {
+                top: #{$top}px;
+            }
+
+            $top: $top + 12;
+        }
+    }
+}
+
+.dynamo-meter-ui__scale-active {
+    position: absolute;
+    bottom: 3px;
+    left: 3px;
+    width: calc(100% - 6px);
+    height: 0;
+    max-height: calc(100% - 4px);
+    background: $green;
+    border-radius: 2px;
+
+    &:after {
+        position: absolute;
+        content: "";
+        top: -1px;
+        left: -7px;
+        width: 48px;
+        height: 3px;
+        background: $white;
+        border-radius: 2px;
+        z-index: 3;
+    }
+}
+
+.dynamo-meter-ui__control {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 172px;
+    text-align: center;
+}
+
+.dynamo-meter-ui__control-text {
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    color: $white;
+    text-shadow: 0 4px 4px rgba($black, 0.25);
+}
+
+.dynamo-meter-ui__control-button {
+    width: 100%;
+    margin-top: 13px;
+
+    button {
+        width: 100%;
+    }
+}
+
+.dynamo-meter-ui__assistant {
+    position: absolute;
+    right: 12px;
+    width: 70px;
+    height: 70px;
+    background: $dark-blue3;
+    border: 1px solid $white;
+    border-radius: 4px;
+    filter: drop-shadow(0px 4px 4px rgba($black, 0.25));
+}

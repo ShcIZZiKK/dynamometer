@@ -1,0 +1,182 @@
+@import "@/assets/styles/colors.scss";
+@import "@/assets/styles/variables.scss";
+
+.dynamo-meter-measure {
+    position: relative;
+    width: 246px;
+    height: 324px;
+}
+
+.dynamo-meter-measure__background {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.dynamo-meter-measure__prize {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 68px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+
+    &.is-active {
+        &:before {
+            opacity: 0;
+        }
+
+        &:after {
+            opacity: 1;
+        }
+    }
+
+    &:before,
+    &:after {
+        position: absolute;
+        content: "";
+        left: -3px;
+        top: 9px;
+        width: calc(100% + 5px);
+        height: calc(100% - 21px);
+        background: linear-gradient(180deg, $lite-purple 0%, rgba($white, 0) 100%), $dark-blue4;
+        border-radius: 4px;
+        z-index: 0;
+        transition: $animation-speed-fast;
+        transition-delay: 1.2s;
+    }
+
+    &:after {
+        background: linear-gradient(180deg, $lite-red 0%, $red2 100%), $dark-blue4;
+        opacity: 0;
+    }
+}
+
+.dynamo-meter-measure__prize-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 2;
+}
+
+.dynamo-meter-measure__prize-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    filter: blur(2px);
+    z-index: 1;
+}
+
+.dynamo-meter-measure__items {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 74px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column-reverse;
+    z-index: 0;
+}
+
+.dynamo-meter-measure__item {
+    $measure-animation-delay: 0;
+    $height: 50;
+    position: relative;
+    width: 100%;
+    border-bottom: 2px solid #080B3A;
+    overflow: hidden;
+
+    &:first-child {
+        border-bottom: 0;
+        margin-bottom: 2px;
+    }
+
+    &:last-child {
+        border-radius: 4px 4px 0 0;
+    }
+
+    &:before {
+        position: absolute;
+        content: "";
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 0;
+    }
+
+    @for $i from 1 through length($measure-colors) {
+        &:nth-child(#{$i}) {
+            height: #{$height}px;
+            background-color: nth($measure-colors, $i);
+
+            &:before {
+                background-color: nth($measure-colors-active, $i);
+            }
+        }
+
+        $height: $height - 5;
+    }
+
+    &.is-active {
+        @for $i from 1 through length($measure-colors-active) {
+            &:nth-child(#{$i}) {
+                &:before {
+                    animation: fill 0.1s linear;
+                    animation-fill-mode: forwards;
+                    animation-delay: #{$measure-animation-delay}s;
+                }
+            }
+
+            $measure-animation-delay: $measure-animation-delay + 0.1;
+        }
+    }
+
+    &.is-last:before {
+        animation-timing-function: ease-out;
+        animation-duration: 0.3s;
+    }
+}
+
+.dynamo-meter-measure__item-glare {
+    position: absolute;
+    left: 1px;
+    top: 2px;
+    right: 2px;
+    bottom: 2px;
+
+    &:before,
+    &:after {
+        position: absolute;
+        content: "";
+        top: 0;
+        background-color: rgba($white, 0.3);
+    }
+
+    &:before {
+        left: 0;
+        width: 100%;
+        height: 3px;
+    }
+
+    &:after {
+        right: 0;
+        width: 3px;
+        height: 100%;
+    }
+}
+
+// ANIMATIONS
+@keyframes fill {
+    0% {
+        height: 0;
+    }
+
+    100% {
+        height: 100%;
+    }
+}

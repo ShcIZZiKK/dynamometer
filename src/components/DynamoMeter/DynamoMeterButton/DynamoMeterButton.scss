@@ -1,0 +1,196 @@
+@import "@/assets/styles/colors.scss";
+@import "@/assets/styles/mixins.scss";
+
+$anim-speed-swing: 0.6;
+$anim-speed-hit: 0.15;
+$anim-speed-button: $anim-speed-hit - (($anim-speed-hit / 100) * 90);
+$anim-button-delay: $anim-speed-swing + $anim-speed-hit - $anim-speed-button;
+
+.dynamo-meter-button {
+    position: relative;
+}
+
+.dynamo-meter-button__base {
+    position: relative;
+    width: 124px;
+}
+
+.dynamo-meter-button__base-top {
+    position: relative;
+    width: 100%;
+    height: 35px;
+    background: radial-gradient(50% 50% at 50% 50%, $lite-blue 0%, $dark-blue2 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    z-index: 1;
+}
+
+.dynamo-meter-button__base-bottom {
+    position: relative;
+    width: 100%;
+    height: 25px;
+    background: linear-gradient(360deg, $lite-blue2 0%, $blue 132.73%);
+    z-index: 1;
+}
+
+.dynamo-meter-button__base-light {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 175px;
+    height: 19px;
+    background: $lite-blue3;
+    filter: blur(10.5px);
+    z-index: 0;
+
+    &:before {
+        position: absolute;
+        content: "";
+        width: 319px;
+        height: 54px;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: $lite-blue4;
+        filter: blur(22px);
+    }
+}
+
+.dynamo-meter-button__action {
+    position: absolute;
+    bottom: 33px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
+
+    &.is-active {
+        .dynamo-meter-button__action-top {
+            animation: press-top #{$anim-speed-button}s linear #{$anim-button-delay}s forwards;
+        }
+
+        .dynamo-meter-button__action-bottom:after {
+            animation: press-bottom #{$anim-speed-button}s linear #{$anim-button-delay}s forwards;
+        }
+    }
+}
+
+.dynamo-meter-button__action-top {
+    position: absolute;
+    bottom: 17.25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 66.63px;
+    height: 18px;
+    background: $lite-red;
+    border-radius: 120px / 40px;
+    z-index: 1;
+    overflow: hidden;
+
+    &:before {
+        position: absolute;
+        content: "";
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 64px;
+        height: 16px;
+        background: linear-gradient(
+                        90deg,
+                        rgba($white, 0.4) 3.12%,
+                        rgba($white, 0) 59.37%
+        );
+        border-radius: 120px / 40px;
+    }
+}
+
+.dynamo-meter-button__action-bottom {
+    position: relative;
+    width: 66.63px;
+    height: 17.99px;
+    background-color: $red;
+    border-radius: 120px / 40px;
+
+    &:after {
+        @include transition(height);
+        position: absolute;
+        content: "";
+        bottom: 8.47px;
+        width: 66.63px;
+        height: 17.85px;
+        background-color: $red;
+    }
+}
+
+.dynamo-meter-button__trigger {
+    @include transition(transform, bottom, right);
+    position: absolute;
+    right: -74px;
+    bottom: -54px;
+    transform-origin: center;
+    pointer-events: none;
+    transform: rotate(-43deg);
+    z-index: 2;
+
+    &.is-step-2 {
+        transform: translate(8px, -33px);
+    }
+
+    &.is-step-3 {
+        animation: swing #{$anim-speed-swing}s ease-out forwards, hit #{$anim-speed-hit}s linear #{$anim-speed-swing}s forwards;
+    }
+
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+// ANIMATIONS
+@keyframes press-top {
+    0% {
+        transform: translate(-50%, 0);
+    }
+
+    100% {
+        transform: translate(-50%, 17px);
+    }
+}
+
+@keyframes press-bottom {
+    0% {
+        height: 17.85px;
+    }
+
+    100% {
+        height: 0;
+    }
+}
+
+@keyframes swing {
+    0% {
+        transform: translate(8px, -33px);
+    }
+
+    100% {
+        transform: translate(18px, -44px) rotate(15deg);
+    }
+}
+
+
+@keyframes hit {
+    0% {
+        transform: translate(18px, -44px) rotate(15deg);
+    }
+
+    50% {
+        transform: translate(-3px, -50px) rotate(0);
+    }
+
+    80% {
+        transform: translate(-24px, -44px) rotate(-38deg);
+    }
+
+    100% {
+        transform: translate(-48px, -30px) rotate(-90deg);
+    }
+}
