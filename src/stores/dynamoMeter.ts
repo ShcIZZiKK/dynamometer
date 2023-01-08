@@ -99,9 +99,7 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
         getNewId();
       };
 
-      setTimeout(() => {
-        getNewId();
-      }, 3000);
+      getNewId();
     },
 
     startAnimationMeasure() {
