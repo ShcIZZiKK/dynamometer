@@ -5,7 +5,7 @@
     viewBox="0 0 110 110"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    :class="modify"
+    :class="[{ 'is-active': isShow }, modify]"
   >
     <g clip-path="url(#clip0_37_554)">
       <path
@@ -26,13 +26,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
+import { useDynamoMeterStore } from "@/stores";
 
 export default defineComponent({
   name: "IconPrizeGlow",
 
   props: {
     modify: [Array, Object, String],
+  },
+
+  setup() {
+    const dynamoMeterStore = useDynamoMeterStore();
+    const isShow = computed(() => {
+      return dynamoMeterStore.isShowingMeasureEnd && dynamoMeterStore.getHasWin;
+    });
+
+    return {
+      isShow,
+    };
   },
 });
 </script>
@@ -42,27 +54,49 @@ svg {
   opacity: 0;
   width: 10px;
   height: 10px;
-  transition: 0.3s;
-  transition-delay: 1.2s;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
 
   &.is-active {
-    opacity: 1;
-    width: 110px;
-    height: 110px;
+    animation-name: show;
+
+    path {
+      animation-name: rotate;
+
+      &:last-child {
+        animation-name: reverse-rotate;
+      }
+    }
   }
 
   path {
-    animation: rotate 8s linear infinite;
+    animation-duration: 8s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
     transform-origin: center;
 
     &:last-child {
-      animation-name: reverse-rotate;
       animation-duration: 10s;
     }
   }
 }
 
 // ANIMATIONS
+@keyframes show {
+  0% {
+    opacity: 0;
+    width: 10px;
+    height: 10px;
+  }
+
+  100% {
+    opacity: 1;
+    width: 110px;
+    height: 110px;
+  }
+}
+
 @keyframes rotate {
   0% {
     transform: rotate(0);

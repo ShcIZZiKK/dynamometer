@@ -1,33 +1,40 @@
 <template>
   <div class="dynamo-meter">
     <div class="dynamo-meter__background">
-      <picture>
-        <source
-          srcset="@/assets/images/bg_top_web@2x.png"
-          media="(min-width: 361px)"
-        />
-        <img src="@/assets/images/bg_top@2x.png" alt="Силомер" />
-      </picture>
+      <div class="dynamo-meter__background-decorations">
+        <IconDecorations />
+      </div>
+      <div class="dynamo-meter__background-lines">
+        <IconLines />
+      </div>
     </div>
 
-    <div class="dynamo-meter__measure-wrapper">
-      <DynamoMeterMeasure />
-    </div>
+    <div :class="['dynamo-meter__container', { 'is-restart': isBlur }]">
+      <DynamoMeterScores />
 
-    <div class="dynamo-meter__button-wrapper">
-      <DynamoMeterButton />
-    </div>
-    <div class="dynamo-meter__ui-wrapper">
-      <DynamoMeterUI />
+      <div class="dynamo-meter__measure-wrapper">
+        <DynamoMeterMeasure />
+      </div>
+
+      <div class="dynamo-meter__button-wrapper">
+        <DynamoMeterButton />
+      </div>
+      <div class="dynamo-meter__ui-wrapper">
+        <DynamoMeterUI />
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent, watch, ref } from "vue";
 import DynamoMeterButton from "@/components/DynamoMeter/DynamoMeterButton/DynamoMeterButton.vue";
 import DynamoMeterMeasure from "@/components/DynamoMeter/DynamoMeterMeasure/DynamoMeterMeasure.vue";
+import DynamoMeterScores from "@/components/DynamoMeter/DynamoMeterScores/DynamoMeterScores.vue";
 import DynamoMeterUI from "@/components/DynamoMeter/DynamoMeterUI/DynamoMeterUI.vue";
+import IconDecorations from "@/components/Svg/Decorations.vue";
+import IconLines from "@/components/Svg/Lines.vue";
+import { useDynamoMeterStore } from "@/stores";
 
 export default defineComponent({
   name: "DynamoMeterApp",
@@ -35,7 +42,29 @@ export default defineComponent({
   components: {
     DynamoMeterButton,
     DynamoMeterMeasure,
+    DynamoMeterScores,
     DynamoMeterUI,
+    IconDecorations,
+    IconLines,
+  },
+
+  setup() {
+    const isFirstLoad = ref(true);
+    const dynamoMeterStore = useDynamoMeterStore();
+    const step = computed(() => {
+      return dynamoMeterStore.getStep;
+    });
+    const isBlur = computed(() => {
+      return step.value === 1 && !isFirstLoad.value;
+    });
+
+    watch(step, () => {
+      isFirstLoad.value = false;
+    });
+
+    return {
+      isBlur,
+    };
   },
 });
 </script>

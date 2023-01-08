@@ -22,7 +22,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref } from "vue";
 import { useDynamoMeterStore } from "@/stores";
-import IconHammer from "@/components/Icons/Hammer.vue";
+import IconHammer from "@/components/Svg/Hammer.vue";
 
 export default defineComponent({
   name: "DynamoMeterButton",

@@ -6,7 +6,11 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
     return {
       step: 1,
       prizeId: 1,
-      prizes: [{ id: 1, image: "ruby", name: "Рубин", color: "#FF4646" }],
+      prizes: [
+        { id: 1, image: "ruby", name: "Рубин", color: "#ff4646", count: 0 },
+        { id: 2, image: "diamond", name: "Алмаз", color: "#63b6df", count: 0 },
+        { id: 3, image: "coin", name: "Монетка", color: "#ffdf35", count: 0 },
+      ],
       power: 0,
       pointsToWin: 97,
       animateMeasure: false,
@@ -31,6 +35,10 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
       return state.prizes.find((item) => item.id === state.prizeId);
     },
 
+    getAllPrizes(state) {
+      return state.prizes;
+    },
+
     canStartAnimationMeasure(state) {
       return state.animateMeasure;
     },
@@ -47,13 +55,53 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
 
     updatePower(newValue: number) {
       this.power = newValue;
+
+      this.saveScore();
+    },
+
+    saveScore() {
+      if (!this.getHasWin) {
+        return;
+      }
+
+      const currentPrize = this.getPrize;
+
+      if (currentPrize) {
+        currentPrize.count += 1;
+      }
     },
 
     resetAllValues() {
+      if (this.getHasWin) {
+        this.updatePrize();
+      }
+
       this.step = 1;
       this.power = 0;
       this.animateMeasure = false;
       this.showingMeasureEnd = false;
+    },
+
+    updatePrize() {
+      const idsPrizes = this.prizes.map((item) => item.id);
+      const size = idsPrizes.length;
+
+      const getNewId = () => {
+        const indexRandom = Math.floor(Math.random() * size);
+        const newIdPrize = idsPrizes[indexRandom];
+
+        if (newIdPrize !== this.prizeId) {
+          this.prizeId = newIdPrize;
+
+          return;
+        }
+
+        getNewId();
+      };
+
+      setTimeout(() => {
+        getNewId();
+      }, 3000);
     },
 
     startAnimationMeasure() {

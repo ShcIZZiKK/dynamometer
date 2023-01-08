@@ -1,8 +1,9 @@
-interface Prizes {
+export interface Prizes {
   id: number;
   image: string;
   name: string;
   color: string;
+  count: number;
 }
 
 export interface StateDynamoMeter {

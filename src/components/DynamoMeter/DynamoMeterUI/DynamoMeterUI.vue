@@ -10,7 +10,7 @@
       ></div>
     </div>
 
-    <Transition name="fade">
+    <Transition name="bounce">
       <div class="dynamo-meter-ui__control" v-show="isShowUIButton">
         <div class="dynamo-meter-ui__control-text" v-html="textUI"></div>
         <div class="dynamo-meter-ui__control-button">
@@ -21,7 +21,9 @@
       </div>
     </Transition>
 
-    <div class="dynamo-meter-ui__assistant"></div>
+    <div class="dynamo-meter-ui__assistant">
+      <IconRobot state="start" />
+    </div>
   </div>
 </template>
 
@@ -30,12 +32,14 @@ import { defineComponent } from "vue";
 import useDynamoMeterAnimations from "@/components/DynamoMeter/DynamoMeterUI/composables/useDynamoMeterAnimations";
 import useDynamoMeterUI from "@/components/DynamoMeter/DynamoMeterUI/composables/useDynamoMeterUI";
 import BaseButton from "@/components/BaseButton/BaseButton.vue";
+import IconRobot from "@/components/Svg/Robot.vue";
 
 export default defineComponent({
   name: "DynamoMeterUI",
 
   components: {
     BaseButton,
+    IconRobot,
   },
 
   setup() {
@@ -58,12 +62,19 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "DynamoMeterUI";
 
-.fade-enter-active {
-  transition: opacity 0.3s ease;
+.bounce-enter-active {
+  animation: bounce-in 0.6s;
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+@keyframes bounce-in {
+  0% {
+    transform: translateX(-50%) scale(0);
+  }
+  50% {
+    transform: translateX(-50%) scale(1.25);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
 }
 </style>

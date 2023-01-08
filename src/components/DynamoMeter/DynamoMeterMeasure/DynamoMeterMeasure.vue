@@ -4,13 +4,13 @@
       <img src="@/assets/images/measure_main.png" alt="measure" />
     </div>
 
-    <div :class="['dynamo-meter-measure__prize', { 'is-active': isWin }]">
+    <div :class="['dynamo-meter-measure__prize', { 'is-active': isShowPrize }]">
       <img
         class="dynamo-meter-measure__prize-image"
-        src="@/assets/images/prizes/ruby.png"
+        :src="require(`@/assets/images/prizes/${prizeImage}.png`)"
       />
       <div class="dynamo-meter-measure__prize-bg">
-        <IconPrizeGlow :modify="{ 'is-active': isWin }" />
+        <IconPrizeGlow />
       </div>
     </div>
 
@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, ref, watch } from "vue";
-import IconPrizeGlow from "@/components/Icons/PrizeGlow.vue";
+import IconPrizeGlow from "@/components/Svg/PrizeGlow.vue";
 import { useDynamoMeterStore } from "@/stores";
 
 export default defineComponent({
@@ -40,6 +40,7 @@ export default defineComponent({
   },
 
   setup() {
+    const maxDelay = 1000;
     /**
      * Кол-во плашек в шкале силы
      */
@@ -64,6 +65,10 @@ export default defineComponent({
       return dynamoMeterStore.getHasWin;
     });
 
+    const isShowPrize = computed(() => {
+      return dynamoMeterStore.isShowingMeasureEnd && isWin.value;
+    });
+
     /**
      * Кол-во закрашиваемых плашек
      */
@@ -79,24 +84,27 @@ export default defineComponent({
       return (measureSize * power.value) / 100;
     });
 
+    const prizeImage = computed(() => {
+      return dynamoMeterStore.getPrize?.image;
+    });
+
     watch(isCanStartAnim, (newValue) => {
+      power.value = dynamoMeterStore.getPower;
+
       if (!newValue) {
         return;
       }
 
       setTimeout(() => {
         dynamoMeterStore.endAnimationMeasure();
-      }, 1000);
-    });
-
-    watch(isCanStartAnim, () => {
-      power.value = dynamoMeterStore.getPower;
+      }, maxDelay * (power.value / 100));
     });
 
     return {
       measureSize,
       scale,
-      isWin,
+      isShowPrize,
+      prizeImage,
     };
   },
 });
