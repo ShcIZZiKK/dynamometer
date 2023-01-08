@@ -1,5 +1,7 @@
 # dynamometer
 
+**demo:** https://shcizzikk.github.io/dynamometer/
+
 ## Project setup
 ```
 npm install
