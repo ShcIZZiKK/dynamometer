@@ -40,37 +40,47 @@ export default defineComponent({
   },
 
   setup() {
+    /**
+     * Maximum delay before displaying the result
+     */
     const maxDelay = 1000;
     /**
-     * Кол-во плашек в шкале силы
+     * Number of bars in the power scale
      */
     const measureSize = 7;
     /**
-     * Сила удара
+     * Impact force
      */
     const power = ref(0);
+
+    /**
+     * Store
+     */
     const dynamoMeterStore = useDynamoMeterStore();
 
     /**
-     * Тригер, что можно запускать анимацию шкалы
+     * Trigger that you can run a scale animation
      */
     const isCanStartAnim = computed(() => {
       return dynamoMeterStore.canStartAnimationMeasure;
     });
 
     /**
-     * Набрано ли достаточное число силы для победы
+     * Is there enough strength to win?
      */
     const isWin = computed(() => {
       return dynamoMeterStore.getHasWin;
     });
 
+    /**
+     * Do we show the prize?
+     */
     const isShowPrize = computed(() => {
       return dynamoMeterStore.isShowingMeasureEnd && isWin.value;
     });
 
     /**
-     * Кол-во закрашиваемых плашек
+     * Number of painted strips
      */
     const scale = computed(() => {
       if (power.value === 0) {
@@ -84,10 +94,16 @@ export default defineComponent({
       return (measureSize * power.value) / 100;
     });
 
+    /**
+     * The name of the prize picture
+     */
     const prizeImage = computed(() => {
       return dynamoMeterStore.getPrize?.image;
     });
 
+    /**
+     * Trace the start of the animation, and update the impact force value
+     */
     watch(isCanStartAnim, (newValue) => {
       power.value = dynamoMeterStore.getPower;
 
@@ -95,6 +111,9 @@ export default defineComponent({
         return;
       }
 
+      /**
+       * Reporting the end of the scale animation
+       */
       setTimeout(() => {
         dynamoMeterStore.endAnimationMeasure();
       }, maxDelay * (power.value / 100));

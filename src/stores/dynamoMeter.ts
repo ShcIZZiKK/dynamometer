@@ -7,9 +7,15 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
       step: 1,
       prizeId: 1,
       prizes: [
-        { id: 1, image: "ruby", name: "Рубин", color: "#ff4646", count: 0 },
-        { id: 2, image: "diamond", name: "Алмаз", color: "#63b6df", count: 0 },
-        { id: 3, image: "coin", name: "Монетка", color: "#ffdf35", count: 0 },
+        { id: 1, image: "ruby", name: "Ruby", color: "#ff4646", count: 0 },
+        {
+          id: 2,
+          image: "diamond",
+          name: "Diamond",
+          color: "#63b6df",
+          count: 0,
+        },
+        { id: 3, image: "coin", name: "Coin", color: "#ffdf35", count: 0 },
       ],
       power: 0,
       pointsToWin: 97,
@@ -49,16 +55,26 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
   },
 
   actions: {
+    /**
+     * Moves on to the next step of the game
+     */
     goToNextStep() {
       this.step += 1;
     },
 
+    /**
+     * Updates the impact force value
+     * @param newValue
+     */
     updatePower(newValue: number) {
       this.power = newValue;
 
       this.saveScore();
     },
 
+    /**
+     * Saves the result if the player wins
+     */
     saveScore() {
       if (!this.getHasWin) {
         return;
@@ -71,6 +87,9 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
       }
     },
 
+    /**
+     * Resets all values
+     */
     resetAllValues() {
       if (this.getHasWin) {
         this.updatePrize();
@@ -82,6 +101,9 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
       this.showingMeasureEnd = false;
     },
 
+    /**
+     * Sets a new prize for the game
+     */
     updatePrize() {
       const idsPrizes = this.prizes.map((item) => item.id);
       const size = idsPrizes.length;
@@ -102,10 +124,16 @@ export const useDynamoMeterStore = defineStore("dynamoMeter", {
       getNewId();
     },
 
+    /**
+     * Fixes the beginning of the scale animation
+     */
     startAnimationMeasure() {
       this.animateMeasure = true;
     },
 
+    /**
+     * Fixes the end of the scale animation
+     */
     endAnimationMeasure() {
       this.showingMeasureEnd = true;
     },

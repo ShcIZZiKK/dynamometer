@@ -1,4 +1,4 @@
-// стандартный transition
+// standart transition
 @mixin transition($property...) {
     transition-property: $property;
     transition-duration: 0.15s;

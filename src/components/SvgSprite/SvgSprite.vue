@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { IconInterface } from "@/interfaces/interfaces";
+import { IconInterface } from "@/interfaces/iconInterface";
 
 export default defineComponent({
   name: "SvgSprite",

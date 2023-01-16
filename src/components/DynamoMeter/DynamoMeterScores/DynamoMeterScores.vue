@@ -28,7 +28,13 @@ export default defineComponent({
   name: "DynamoMeterScores",
 
   setup() {
+    /**
+     * Store
+     */
     const dynamoMeterStore = useDynamoMeterStore();
+    /**
+     * List of prizes to be won
+     */
     const prizes = computed(() => {
       return dynamoMeterStore.getAllPrizes;
     });

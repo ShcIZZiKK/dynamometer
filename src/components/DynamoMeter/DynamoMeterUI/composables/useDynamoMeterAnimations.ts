@@ -3,29 +3,35 @@ import { useDynamoMeterStore } from "@/stores";
 
 export default function useDynamoMeterAnimations() {
   /**
-   * Сила удара от 0 до 100
+   * Impact force from 0 to 100
    */
   const power = ref(0);
   /**
-   * Направление, куда сейчас движется шкала силы 1 - вверх, -1 - вниз
+   * The direction in which the power scale now moves 1 - up, -1 - down
    */
   const direction = ref(1);
   /**
-   * Скорость с которой движется шкала
+   * The speed at which the scale moves
    */
   const speed = 1.5;
   /**
-   * Анимация
+   * Animation
    */
   let reqAnim: number;
 
+  /**
+   * Store
+   */
   const dynamoMeterStore = useDynamoMeterStore();
+  /**
+   * Game current progress
+   */
   const step = computed(() => {
     return dynamoMeterStore.getStep;
   });
 
   /**
-   * Запускает анимацию шкалы силы удара
+   * Triggers the impact force scale animation
    */
   const animateScalePower = () => {
     if (direction.value > 0) {
@@ -38,14 +44,14 @@ export default function useDynamoMeterAnimations() {
   };
 
   /**
-   * Останавливает анимацию шкалы
+   * Stops the animation of the scale
    */
   const stopAnimationScalePower = () => {
     window.cancelAnimationFrame(reqAnim);
   };
 
   /**
-   * Изменяет текущий шаг игры
+   * Changes the current pitch of the game
    */
   const actionGame = () => {
     switch (step.value) {
@@ -64,6 +70,9 @@ export default function useDynamoMeterAnimations() {
     }
   };
 
+  /**
+   * Tracking changes in scale direction
+   */
   watch(power, (newValue) => {
     if (newValue >= 100) {
       direction.value = -1;
@@ -74,6 +83,9 @@ export default function useDynamoMeterAnimations() {
     }
   });
 
+  /**
+   * Resetting the scale at game start
+   */
   watch(step, (newValue) => {
     if (newValue === 1) {
       power.value = 0;

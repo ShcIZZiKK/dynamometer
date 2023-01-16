@@ -32,19 +32,38 @@ export default defineComponent({
   },
 
   setup() {
+    /**
+     * html element as a button
+     */
     const button = ref<HTMLInputElement | null>(null);
+    /**
+     * Store
+     */
     const dynamoMeterStore = useDynamoMeterStore();
+    /**
+     * Game current progress
+     */
     const step = computed(() => {
       return dynamoMeterStore.getStep;
     });
+    /**
+     * Trigger that the button is pressed
+     */
     const isButtonPress = computed(() => {
       return step.value === 3;
     });
 
+    /**
+     * Starts the animation of the scale
+     */
     const callButtonPressed = () => {
       dynamoMeterStore.startAnimationMeasure();
     };
 
+    /**
+     * Hanging the event on the button, so that at the end of the animation
+     * the next step of the game will be executed
+     */
     onMounted(() => {
       button.value?.addEventListener("animationend", () => {
         callButtonPressed();

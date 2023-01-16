@@ -380,12 +380,18 @@ export default defineComponent({
   },
 
   setup() {
+    /**
+     * Store
+     */
     const dynamoMeterStore = useDynamoMeterStore();
+    /**
+     * Victory trigger
+     */
     const isWin = computed(() => {
       return dynamoMeterStore.isShowingMeasureEnd && dynamoMeterStore.getHasWin;
     });
     /**
-     * Тригер, что можно запускать анимацию шкалы
+     * Trigger that it is possible to run a scale animation
      */
     const isWait = computed(() => {
       return dynamoMeterStore.canStartAnimationMeasure;
