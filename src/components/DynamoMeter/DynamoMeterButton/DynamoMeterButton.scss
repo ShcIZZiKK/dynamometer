@@ -1,9 +1,10 @@
+@use "sass:math";
 @import "@/assets/styles/colors.scss";
 @import "@/assets/styles/mixins.scss";
 
 $anim-speed-swing: 0.6;
 $anim-speed-hit: 0.15;
-$anim-speed-button: $anim-speed-hit - (($anim-speed-hit / 100) * 90);
+$anim-speed-button: $anim-speed-hit - (math.div($anim-speed-hit, 100) * 90);
 $anim-button-delay: $anim-speed-swing + $anim-speed-hit - $anim-speed-button;
 
 .dynamo-meter-button {
